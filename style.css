@@ -98,4 +98,19 @@ div.choices {
 
 button.choices {
     display: list-item;
+    background-color: purple;
+    color: white;
+    border: none;
+}
+
+
+section.dont-display {
+    display: none;
+}
+
+section.display {
+    display: in-line-block;
+}
+.highScorePage {
+    display: block;
 }

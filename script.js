@@ -6,7 +6,7 @@ var head = document.getElementsByTagName("header");
 var choicesEl = document.getElementById('choices')
 var questionEl = document.getElementById("questions")
 var currentQuestionIndex = 0
-
+var winCounter = 0
 
 //List of my trivia questions
 var triviaIndex;
@@ -113,6 +113,7 @@ function questionClick (event) {
             if (buttonEl.value !== triviaQuestions[currentQuestionIndex].correctAnswer) {
                 secondsLeft -= 15
             } else {
+                winCounter++
                 loadQuestion();
             }
             //TODO: add game over/lose game page 
@@ -133,20 +134,16 @@ function questionClick (event) {
 
 //when done with questions you can enter initials
 function renderScore() {
-    document.querySelector(".show").setAttribute("class", "hide");
-    var highScorePage = document.createElement("section")
-    highScorePage.setAttribute("class", "done")
-    document.body.appendChild(highScorePage)
-    var h3 = document.createElement("h3")
-    highScorePage.appendChild(h3)
+    document.querySelector(".show").setAttribute("class", "hide")
+    document.querySelector(".dont-display").setAttribute("class", "display")
+    h3 = document.getElementsByClassName("h3")[0]
     h3.textContent = "All Done!"
-    
 }
 
 //once highscore button is clicked, render new page and score list with intials (local storage)
 highScore.addEventListener("click", function(e) {
-    document.querySelector(".main").setAttribute("class", "hide");
-    document.querySelector(".quiz").setAttribute("class", "show");
+    //document.querySelector(".").setAttribute("class", "hide");
+    //document.querySelector(".quiz").setAttribute("class", "show");
     
 });
 //inside highscore page, add exit button to return to main page 
