@@ -4,7 +4,9 @@ var highScore = document.querySelector(".points");
 var mainEl = document.querySelector("main");
 var head = document.getElementsByTagName("header");
 var choicesEl = document.getElementById('choices')
+var questionEl = document.getElementById("questions")
 var currentQuestionIndex = 0
+
 
 //List of my trivia questions
 var triviaIndex;
@@ -18,7 +20,7 @@ var triviaQuestions = [
             "Benjamin Franklin",
             "John Adams",
         ],
-        correctAnswer: "2",
+        correctAnswer: "Abraham Lincoln",
     },
 
     {
@@ -29,7 +31,7 @@ var triviaQuestions = [
             "Yellowstone National Park",
             "Glacier National Park",
         ],
-        correctAnswer: "3",
+        correctAnswer: "Yellowstone National Park",
     },
 
     {
@@ -40,7 +42,7 @@ var triviaQuestions = [
             "Cyclops",
             "A Crown",
         ],
-        correctAnswer: "1",
+        correctAnswer: "Siren",
     },
 
     {
@@ -51,7 +53,7 @@ var triviaQuestions = [
             "Aquarius, Pices, Gemini",
             "All of the above",
         ],
-        correctAnswer: "1",
+        correctAnswer: "Cancer, Leo, Virgo",
     },
 
     {
@@ -62,56 +64,92 @@ var triviaQuestions = [
             "Alligator",
             "Turtle",
         ],
-        correctAnswer: "4",
+        correctAnswer: "Turtle",
     }
 ]
 
 //This function is to properly load the questions from page to page
 function loadQuestion() {
-    
+    // stores questions object
     var currentQuestion = triviaQuestions[currentQuestionIndex]
-    console.log(currentQuestion)
     var question = triviaQuestions[triviaIndex];
-    
-    document.getElementsByClassName("questions")[0].textContent = question.questions;
-    
-    
-   
-   choicesEl.innerHTML = ""
-   for (let i = 0; i < currentQuestion.answers.length; i++) {
-    var choice = currentQuestion.answers[i]
-    
-    var choiceNode = document.createElement('button')
-    choiceNode.setAttribute("class", "choices")
-    choiceNode.setAttribute("value", choice)
-    choiceNode.textContent = i + 1 + '.' + choice
-    
-    choicesEl.appendChild(choiceNode)
+
+    // console.log("question " + question.questions)
+    questionEl.textContent = triviaIndex + 1 + "." + question.questions
+        // for (let q = 0; q < question.questions.length; q++) {
+        //     // stores string of qth index in questions array of strings
+        //     var presentQuestion = question.questions[q]
+        //     questionEl.setAttribute("value", presentQuestion)
+        //     questionEl.textContent = q + 1 + '.' + presentQuestion
+        // }
     
     
-   }
+    
+    console.log(questionEl)
+    
+        
+    choicesEl.innerHTML = ""
+        for (let i = 0; i < currentQuestion.answers.length; i++) {
+            var choice = currentQuestion.answers[i]
+                console.log(choice)
+            var choiceNode = document.createElement('button')
+            choiceNode.setAttribute("class", "choices")
+            choiceNode.setAttribute("value", choice)
+            choiceNode.textContent = i + 1 + '.' + choice
+            choicesEl.appendChild(choiceNode)
+        }
 };
 
 function questionClick (event) {
+    //created var = buttonEl to allow an event to fire and run through a series of if statements once button is clicked
     var buttonEl = event.target
+        //if on the event 
         if (!buttonEl.matches(".choices")) {
             return;
         }
-        if (buttonEl.value !== triviaQuestions[currentQuestionIndex].answers) {
-            secondsLeft -= 15
-            if (secondsLeft == 0) {
-                
+            //clicking the right answer will load the next question. If the answer is incorrect, it will penalize 15 secs from your time
+            //else the next question will load
+            console.log(triviaQuestions[currentQuestionIndex].correctAnswer)
+            if (buttonEl.value !== triviaQuestions[currentQuestionIndex].correctAnswer) {
+                secondsLeft -= 15
+            } else {
+                loadQuestion();
             }
-        } else {
-            console.log("Test")
-        }
+            //TODO: add game over/lose game page 
+            if (secondsLeft == 0) {
+                return;
+            }
+        //trivia++ and currentQuestionIndex++ allow for the value to increment by one
+        triviaIndex++
         currentQuestionIndex++
+        //if you finish the questions before the time ends, then you will redirected to 
         if (secondsLeft <= 0 || currentQuestionIndex === triviaQuestions.length) {
-            console.log("Lol")
+            renderScore();
+            clearInterval(secondsLeft);
           } else {
             loadQuestion();
           }
 }
+
+//when done with questions you can enter initials
+function renderScore() {
+    document.querySelector(".show").setAttribute("class", "hide");
+    var highScorePage = document.createElement("section")
+    highScorePage.setAttribute("class", "done")
+    document.body.appendChild(highScorePage)
+    var h3 = document.createElement("h3")
+    highScorePage.appendChild(h3)
+    h3.textContent = "All Done!"
+    
+}
+
+//once highscore button is clicked, render new page and score list with intials (local storage)
+highScore.addEventListener("click", function(e) {
+    document.querySelector(".main").setAttribute("class", "hide");
+    document.querySelector(".quiz").setAttribute("class", "show");
+    
+});
+//inside highscore page, add exit button to return to main page 
 
 //Starting the game will trigger a series of quesitons to show up
 //Click to start game
@@ -119,7 +157,7 @@ var secondsLeft = 60;
 startBtn.addEventListener("click", function() {
      document.querySelector(".quiz").setAttribute("class", "show");
      document.querySelector(".main").setAttribute("class", "hide");
-     var time = setInterval(function() {
+     const time = setInterval(function() {
         secondsLeft--;
         timerInterval.textContent = secondsLeft;
 
@@ -131,4 +169,5 @@ startBtn.addEventListener("click", function() {
      loadQuestion();
 });
 
+//When we click on a button, it fires the questionClick event
 choicesEl.onclick = questionClick

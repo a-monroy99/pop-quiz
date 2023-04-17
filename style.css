@@ -78,3 +78,24 @@ section.show {
 main.hide {
     display: none;
 }
+
+section.hide {
+    display: none;
+}
+
+h3 {
+    text-align: center;
+}
+
+div.choices {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    flex-direction: column;
+}
+
+button.choices {
+    display: list-item;
+}
