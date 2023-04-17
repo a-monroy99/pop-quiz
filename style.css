@@ -101,6 +101,8 @@ button.choices {
     background-color: purple;
     color: white;
     border: none;
+    cursor: pointer;
+    justify-content: space-between;
 }
 
 
@@ -111,6 +113,7 @@ section.dont-display {
 section.display {
     display: in-line-block;
 }
+
 .highScorePage {
     display: block;
 }
