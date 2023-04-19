@@ -102,7 +102,8 @@ button.choices {
     color: white;
     border: none;
     cursor: pointer;
-    justify-content: space-between;
+    margin: 5px;
+    font-size: 25px;
 }
 
 
@@ -111,9 +112,25 @@ section.dont-display {
 }
 
 section.display {
-    display: in-line-block;
+    display: inline-block;
+    justify-content: center;
 }
 
-.highScorePage {
-    display: block;
+form.form {
+    text-align: center;
+}
+
+section.noHS {
+    display: none;
+}
+
+.highScore {
+    font-size: 25px;
+}
+
+ol.initials {
+    display: flex;
+    text-align: center;
+    display: flex;
+    justify-content: center;
 }

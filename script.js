@@ -7,6 +7,8 @@ var choicesEl = document.getElementById('choices')
 var questionEl = document.getElementById("questions")
 var currentQuestionIndex = 0
 var winCounter = 0
+var initialBtn = document.querySelector(".initial-button")
+var clearBtn = document.querySelector(".clear")
 
 //List of my trivia questions
 var triviaIndex;
@@ -73,25 +75,10 @@ function loadQuestion() {
     // stores questions object
     var currentQuestion = triviaQuestions[currentQuestionIndex]
     var question = triviaQuestions[triviaIndex];
-
-    // console.log("question " + question.questions)
-    questionEl.textContent = triviaIndex + 1 + "." + question.questions
-        // for (let q = 0; q < question.questions.length; q++) {
-        //     // stores string of qth index in questions array of strings
-        //     var presentQuestion = question.questions[q]
-        //     questionEl.setAttribute("value", presentQuestion)
-        //     questionEl.textContent = q + 1 + '.' + presentQuestion
-        // }
-    
-    
-    
-    console.log(questionEl)
-    
-        
+    questionEl.textContent = triviaIndex + 1 + "." + question.questions    
     choicesEl.innerHTML = ""
         for (let i = 0; i < currentQuestion.answers.length; i++) {
             var choice = currentQuestion.answers[i]
-                console.log(choice)
             var choiceNode = document.createElement('button')
             choiceNode.setAttribute("class", "choices")
             choiceNode.setAttribute("value", choice)
@@ -113,6 +100,7 @@ function questionClick (event) {
             if (buttonEl.value !== triviaQuestions[currentQuestionIndex].correctAnswer) {
                 secondsLeft -= 15
             } else {
+                //winCounter allows for the points to increment to 1 for every correct answer
                 winCounter++
                 loadQuestion();
             }
@@ -134,23 +122,39 @@ function questionClick (event) {
 
 //when done with questions you can enter initials
 function renderScore() {
+    localStorage.setItem("winCounter", winCounter)
     document.querySelector(".show").setAttribute("class", "hide")
     document.querySelector(".dont-display").setAttribute("class", "display")
     h3 = document.getElementsByClassName("h3")[0]
     h3.textContent = "All Done!"
 }
 
-//once highscore button is clicked, render new page and score list with intials (local storage)
-highScore.addEventListener("click", function(e) {
-    //document.querySelector(".").setAttribute("class", "hide");
-    //document.querySelector(".quiz").setAttribute("class", "show");
-    
-});
-//inside highscore page, add exit button to return to main page 
+//TODO intials and score is supposee to display
+initialBtn.addEventListener("click", function(event) {
+    event.preventDefault();
+    var initials = document.querySelector(".inputInitials").value;
+     localStorage.setItem("initials", initials)
+     localStorage.getItem("winCounter")
+     showScorePage();
+ });
 
+
+//will show score list
+//highScore.addEventListener("click", showScorePage());
+
+//renders the
+ function showScorePage() {
+    document.querySelector(".noHS").classList.remove("noHS");
+    document.querySelector(".display").setAttribute("class", "dont-display")
+    var initialsEl = document.querySelector(".initials-list");
+    var initialsList = localStorage.getItem("initials");
+    initialsEl.textContent = initialsList.toUpperCase() + " - " + localStorage.getItem("winCounter")
+
+};
 //Starting the game will trigger a series of quesitons to show up
-//Click to start game
+//the game starts with 60 secs
 var secondsLeft = 60;
+
 startBtn.addEventListener("click", function() {
      document.querySelector(".quiz").setAttribute("class", "show");
      document.querySelector(".main").setAttribute("class", "hide");
@@ -167,4 +171,6 @@ startBtn.addEventListener("click", function() {
 });
 
 //When we click on a button, it fires the questionClick event
-choicesEl.onclick = questionClick
+choicesEl.onclick = questionClick;
+
+//initialBtn.onclick = showScorePage;
